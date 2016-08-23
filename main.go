@@ -14,6 +14,7 @@ import (
 	"path/filepath"
 )
 
+var address = flag.String("address", ":3000", "Listen and serve at this address")
 var base = flag.String("base", ".", "base directory for files")
 
 func handler(fs http.Dir) http.HandlerFunc {
@@ -51,6 +52,6 @@ func main() {
 	fs := http.Dir(*base)
 
 	http.HandleFunc("/", handler(fs))
-	log.Println("Listening...")
-	http.ListenAndServe(":3000", nil)
+	log.Printf("Listening on %v ...", *address)
+	http.ListenAndServe(*address, nil)
 }
