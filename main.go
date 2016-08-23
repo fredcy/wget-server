@@ -1,13 +1,13 @@
 package main
 
 // This simple HTTP server serves static files as obtained by "wget -r -p -k"
-// for some site. The files created by wget have any query string in their name
-// and so we treat the requested URLs the same way, treating the query string as
-// part of the static file to be found and returned.
+// for some site. The files created by wget have any query string in the request
+// included literally in their name and so we handle the requested URLs the same
+// way, treating the query string as part of the name of the static file to be
+// found and served.
 
 import (
 	"flag"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -36,11 +36,11 @@ func handler(fs http.Dir) http.HandlerFunc {
 		f, err := fs.Open(path)
 		if err != nil {
 			log.Printf("Cannot open %v: %v", path, err)
-			fmt.Fprintf(w, "Cannot open %v: %v", path, err)
+			http.NotFound(w, r)
 		} else {
 			if _, err := io.Copy(w, f); err != nil {
 				log.Printf("Cannot copy %v: %v", path, err)
-				fmt.Fprintf(w, "Cannot copy file")
+				http.Error(w, err.Error(), 500)
 			}
 			f.Close()
 		}
