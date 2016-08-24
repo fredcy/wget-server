@@ -53,5 +53,6 @@ func main() {
 
 	http.HandleFunc("/", handler(fs))
 	log.Printf("Listening on %v ...", *address)
-	http.ListenAndServe(*address, nil)
+	err := http.ListenAndServe(*address, nil)
+	log.Fatal(err)
 }
