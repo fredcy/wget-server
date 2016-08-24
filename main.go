@@ -33,6 +33,8 @@ func handler(fs http.Dir) http.HandlerFunc {
 			w.Header().Set("Content-Type", "text/css")
 		}
 
+		w.Header().Set("Cache-Control", "max-age=600")
+
 		f, err := fs.Open(path)
 		if err != nil {
 			log.Printf("Cannot open %v: %v", path, err)
